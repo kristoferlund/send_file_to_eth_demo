@@ -21,16 +21,16 @@ function TransferDialogInner({ transferId }: { transferId: number }) {
     }
     const { transportSecretKey, encryptedKey } = vetkdEncryptedKeyReturn;
     const derivationId = toBytes(address);
-    const k_bytes = transportSecretKey.decrypt(
+    const key = transportSecretKey.decrypt(
       encryptedKey,
       publicKey,
       derivationId,
     );
-    const ibe_ciphertext = vetkd.IBECiphertext.deserialize(
+    const ibeCiphertext = vetkd.IBECiphertext.deserialize(
       transfer.file as Uint8Array<ArrayBufferLike>,
     );
-    const ibe_plaintext = ibe_ciphertext.decrypt(k_bytes);
-    setDecryptedMessage(new TextDecoder().decode(ibe_plaintext));
+    const ibePlaintext = ibeCiphertext.decrypt(key);
+    setDecryptedMessage(new TextDecoder().decode(ibePlaintext));
   }, [transfer, publicKey, address, vetkdEncryptedKeyReturn]);
 
   if (isPending) {
