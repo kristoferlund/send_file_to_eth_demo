@@ -1,0 +1,41 @@
+
+type Transfer = record {
+  id : nat32;
+  created : nat64;
+  from : text;
+  to : text;
+  file : blob;
+};
+
+type TransferCreateResponse = variant {
+  Ok : Transfer;
+  Err : text;
+};
+
+type TransferListResponse = variant {
+  Ok : vec Transfer;
+  Err : text;
+};
+
+type TransferGetResponse = variant {
+  Ok : Transfer;
+  Err : text;
+};
+
+type VetkdEncryptedKeyResponse = variant {
+  Ok : blob;
+  Err : text;
+};
+
+type VetkdPublicKeyResponse = variant {
+  Ok : blob;
+  Err : text;
+};
+
+service : () -> {
+  "transfer_create" : (text, blob) -> (TransferCreateResponse);
+  "transfer_list" : () -> (TransferListResponse);
+  "transfer_get" : (nat32) -> (TransferGetResponse);
+  "vetkd_encrypted_key" : (blob) -> (VetkdEncryptedKeyResponse);
+  "vetkd_public_key" : (text) -> (VetkdPublicKeyResponse);
+};
