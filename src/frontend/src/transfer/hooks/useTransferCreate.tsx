@@ -12,7 +12,7 @@ export default function useTransferCreate() {
       file,
     }: {
       recipientAddress: string;
-      file: Uint8Array<ArrayBufferLike>;
+      file: File;
     }) => {
       if (!backend) {
         console.error("Backend actor not available");
@@ -23,19 +23,24 @@ export default function useTransferCreate() {
         console.error("Error getting recipient public key", response.Err);
         return;
       }
-      const recipientPublicKey = response.Ok as Uint8Array<ArrayBufferLike>;
+
+      const recipientPublicKey = response.Ok as Uint8Array;
       const derivationId = toBytes(recipientAddress);
       const seed = window.crypto.getRandomValues(new Uint8Array(32));
+      const fileBuffer = await file.arrayBuffer();
+      const encodedMessage = new Uint8Array(fileBuffer);
       const encryptedFile = vetkd.IBECiphertext.encrypt(
         recipientPublicKey,
         derivationId,
-        file,
+        encodedMessage,
         seed,
       );
-      return backend?.transfer_create(
-        recipientAddress,
-        encryptedFile.serialize(),
-      );
+      return backend.transfer_create({
+        to: recipientAddress,
+        content_type: file.type,
+        filename: file.name,
+        data: encryptedFile.serialize(),
+      });
     },
   });
 }

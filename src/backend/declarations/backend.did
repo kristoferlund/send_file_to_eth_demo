@@ -1,10 +1,19 @@
-
 type Transfer = record {
   id : nat32;
   created : nat64;
   from : text;
   to : text;
-  file : blob;
+  filename : text;
+  size : nat32;
+  content_type : text;
+  data : blob;
+};
+
+type TransferCreateRequest = record {
+  to : text;
+  filename : text;
+  content_type : text;
+  data : blob;
 };
 
 type TransferCreateResponse = variant {
@@ -33,7 +42,7 @@ type VetkdPublicKeyResponse = variant {
 };
 
 service : () -> {
-  "transfer_create" : (text, blob) -> (TransferCreateResponse);
+  "transfer_create" : (TransferCreateRequest) -> (TransferCreateResponse);
   "transfer_list" : () -> (TransferListResponse);
   "transfer_get" : (nat32) -> (TransferGetResponse);
   "vetkd_encrypted_key" : (blob) -> (VetkdEncryptedKeyResponse);

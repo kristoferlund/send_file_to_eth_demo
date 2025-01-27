@@ -6,8 +6,17 @@ export interface Transfer {
   'id' : number,
   'to' : string,
   'created' : bigint,
-  'file' : Uint8Array | number[],
+  'data' : Uint8Array | number[],
   'from' : string,
+  'size' : number,
+  'content_type' : string,
+  'filename' : string,
+}
+export interface TransferCreateRequest {
+  'to' : string,
+  'data' : Uint8Array | number[],
+  'content_type' : string,
+  'filename' : string,
 }
 export type TransferCreateResponse = { 'Ok' : Transfer } |
   { 'Err' : string };
@@ -21,7 +30,7 @@ export type VetkdPublicKeyResponse = { 'Ok' : Uint8Array | number[] } |
   { 'Err' : string };
 export interface _SERVICE {
   'transfer_create' : ActorMethod<
-    [string, Uint8Array | number[]],
+    [TransferCreateRequest],
     TransferCreateResponse
   >,
   'transfer_get' : ActorMethod<[number], TransferGetResponse>,

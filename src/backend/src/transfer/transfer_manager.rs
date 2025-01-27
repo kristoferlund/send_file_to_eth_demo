@@ -4,8 +4,16 @@ use alloy::primitives::Address;
 
 pub struct TransferManager {}
 
+pub struct TransferManagerCreateArgs {
+    pub from: Address,
+    pub to: Address,
+    pub filename: String,
+    pub content_type: String,
+    pub data: Vec<u8>,
+}
+
 impl TransferManager {
-    pub fn create(from: Address, to: Address, file: Vec<u8>) -> Result<Transfer, String> {
+    pub fn create(args: TransferManagerCreateArgs) -> Result<Transfer, String> {
         let next_id = NEXT_TRANSFER_ID.with_borrow_mut(|id| {
             let next_id = id.get() + 1;
             id.set(next_id).unwrap();
@@ -16,15 +24,18 @@ impl TransferManager {
             let transfer = Transfer {
                 id: next_id,
                 created: ic_cdk::api::time(),
-                from: from.to_checksum(None),
-                to: to.to_checksum(None),
-                file,
+                from: args.from.to_checksum(None),
+                to: args.to.to_checksum(None),
+                filename: args.filename,
+                size: args.data.len() as u32,
+                content_type: args.content_type,
+                data: args.data,
             };
             transfers.insert(next_id, transfer.clone());
             transfer
         });
 
-        TO_TRANSFERS_INDEX.with_borrow_mut(|index| index.insert((*to.0, next_id), next_id));
+        TO_TRANSFERS_INDEX.with_borrow_mut(|index| index.insert((*args.to.0, next_id), next_id));
 
         Ok(transfer)
     }

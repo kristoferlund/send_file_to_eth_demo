@@ -26,7 +26,7 @@ function TransferDialogInner({ transferId }: { transferId: number }) {
       derivationId,
     );
     const ibeCiphertext = vetkd.IBECiphertext.deserialize(
-      transfer.file as Uint8Array,
+      transfer.data as Uint8Array,
     );
     const ibePlaintext = ibeCiphertext.decrypt(key);
     setDecryptedMessage(new TextDecoder().decode(ibePlaintext));

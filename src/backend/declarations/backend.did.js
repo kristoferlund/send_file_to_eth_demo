@@ -1,10 +1,19 @@
 export const idlFactory = ({ IDL }) => {
+  const TransferCreateRequest = IDL.Record({
+    'to' : IDL.Text,
+    'data' : IDL.Vec(IDL.Nat8),
+    'content_type' : IDL.Text,
+    'filename' : IDL.Text,
+  });
   const Transfer = IDL.Record({
     'id' : IDL.Nat32,
     'to' : IDL.Text,
     'created' : IDL.Nat64,
-    'file' : IDL.Vec(IDL.Nat8),
+    'data' : IDL.Vec(IDL.Nat8),
     'from' : IDL.Text,
+    'size' : IDL.Nat32,
+    'content_type' : IDL.Text,
+    'filename' : IDL.Text,
   });
   const TransferCreateResponse = IDL.Variant({
     'Ok' : Transfer,
@@ -28,7 +37,7 @@ export const idlFactory = ({ IDL }) => {
   });
   return IDL.Service({
     'transfer_create' : IDL.Func(
-        [IDL.Text, IDL.Vec(IDL.Nat8)],
+        [TransferCreateRequest],
         [TransferCreateResponse],
         [],
       ),

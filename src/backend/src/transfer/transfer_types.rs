@@ -13,7 +13,10 @@ pub struct Transfer {
     pub created: Timestamp,
     pub from: String,
     pub to: String,
-    pub file: Vec<u8>,
+    pub filename: String,
+    pub size: u32,
+    pub content_type: String,
+    pub data: Vec<u8>,
 }
 
 impl Transfer {
@@ -23,7 +26,10 @@ impl Transfer {
             created: self.created,
             from: self.from.clone(),
             to: self.to.clone(),
-            file: vec![],
+            filename: self.filename.clone(),
+            size: self.size,
+            content_type: self.content_type.clone(),
+            data: vec![],
         }
     }
 }

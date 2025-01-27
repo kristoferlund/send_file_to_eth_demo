@@ -24,9 +24,7 @@ export default function SendFile() {
 
     setSaving(true);
     try {
-      const fileBuffer = await file.arrayBuffer();
-      const encodedMessage = new Uint8Array(fileBuffer);
-      await createTransfer({ recipientAddress, file: encodedMessage });
+      await createTransfer({ recipientAddress, file });
       toast({ description: "File sent successfully!" });
       void queryClient.invalidateQueries({ queryKey: ["transfer_list"] });
       setFile(null); // Reset file after successful transfer

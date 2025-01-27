@@ -2,6 +2,7 @@ import { useState } from "react";
 import useTransferList from "../transfer/hooks/useTransferList";
 import TransferDialog from "./TransferDialog";
 import { formatDistanceToNow } from "date-fns";
+import { File } from "lucide-react";
 
 function ReceivedFilesInner() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,37 +24,62 @@ function ReceivedFilesInner() {
 
   return (
     <div className="space-y-4 w-full">
-      {transfers
-        .slice()
-        .reverse()
-        .map((transfer) => {
-          const createdAt = new Date(Number(transfer.created) / 1_000_000); // Convert nanoseconds to milliseconds
-          const formattedDate = formatDistanceToNow(createdAt, {
-            addSuffix: true,
-          });
+      <table className="w-full text-sm">
+        <thead>
+          <tr>
+            <th className="text-left p-4">Filename</th>
+            <th className="text-left p-4">From</th>
+            <th className="text-left p-4">Size</th>
+            <th className="text-left p-4">Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transfers
+            .slice()
+            .reverse()
+            .map((transfer) => {
+              const createdAt = new Date(Number(transfer.created) / 1_000_000);
+              const formattedDate = formatDistanceToNow(createdAt, {
+                addSuffix: true,
+              });
 
-          return (
-            <div
-              key={transfer.created.toString()}
-              className="p-4 rounded-lg hover:bg-muted cursor-pointer"
-              onClick={() => {
-                openTransferDialog(transfer.id);
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <span className="text-sm">
-                    From:{" "}
-                    <span className="px-2 py-1 bg-primary rounded-full text-primary-foreground">
-                      {`${transfer.from.slice(0, 6)}...${transfer.from.slice(-4)}`}
+              return (
+                <tr
+                  key={transfer.created.toString()}
+                  className="hover:bg-muted cursor-pointer"
+                  onClick={() => {
+                    openTransferDialog(transfer.id);
+                  }}
+                >
+                  <td className="p-4">
+                    <div className="flex gap-2 max-w-44 min-w-0">
+                      <File />
+                      <span className="truncate flex-1">
+                        {transfer.filename}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <span className="text-sm">
+                      <span className="px-2 py-1 bg-primary rounded-full text-primary-foreground">
+                        {`${transfer.from.slice(0, 6)}...${transfer.from.slice(-4)}`}
+                      </span>
                     </span>
-                  </span>
-                </div>
-                <span className="text-sm text-primary/50">{formattedDate}</span>
-              </div>
-            </div>
-          );
-        })}
+                  </td>
+                  <td className="p-4 text-sm text-primary/50">
+                    {transfer.size >= 1048576
+                      ? `${(transfer.size / 1048576).toFixed(2).replace(".", ",")} MB`
+                      : `${(transfer.size / 1024).toFixed(2).replace(".", ",")} KB`}
+                  </td>
+
+                  <td className="p-4 text-sm text-primary/50">
+                    {formattedDate}
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
       <TransferDialog
         isOpen={isOpen}
         transferId={transferId}
