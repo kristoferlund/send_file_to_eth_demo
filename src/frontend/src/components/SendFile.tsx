@@ -127,7 +127,7 @@ export default function SendFile() {
         </div>
         <div
           className={`flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg ${
-            isDragging ? "border-primary bg-muted" : "border-muted bg-muted/50"
+            isDragging ? "border-primary bg-muted" : "border-muted"
           }`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
