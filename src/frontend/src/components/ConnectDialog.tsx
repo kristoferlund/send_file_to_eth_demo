@@ -48,7 +48,9 @@ export default function ConnectDialog({
             className="justify-between w-52"
             disabled={isConnected || isPending}
             key={connector.id}
-            onClick={() => connect({ connector })}
+            onClick={() => {
+              connect({ connector });
+            }}
             variant="outline"
           >
             {icon(connector)}

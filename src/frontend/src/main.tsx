@@ -13,9 +13,15 @@ import { wagmiConfig } from "./wagmi/wagmi.config.ts";
 import { canisterId } from "../../ic_siwe_provider/declarations/index";
 import { Toaster } from "@/components/ui/toaster.tsx";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>

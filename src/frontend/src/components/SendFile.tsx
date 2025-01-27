@@ -4,6 +4,7 @@ import { useActor } from "../ic/Actors";
 import useTransferCreate from "../transfer/hooks/useTransferCreate";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
+import { queryClient } from "@/main";
 
 export default function SendFile() {
   const { actor } = useActor();
@@ -27,6 +28,7 @@ export default function SendFile() {
       const encodedMessage = new Uint8Array(fileBuffer);
       await createTransfer({ recipientAddress, file: encodedMessage });
       toast({ description: "File sent successfully!" });
+      void queryClient.invalidateQueries({ queryKey: ["transfer_list"] });
       setFile(null); // Reset file after successful transfer
     } catch (error) {
       console.error(error);
@@ -96,20 +98,27 @@ export default function SendFile() {
     }
   }
 
-  const submitIcon = saving ? <LoaderCircle /> : undefined;
+  const submitIcon = saving ? (
+    <LoaderCircle className="animate-spin" />
+  ) : undefined;
   const submitText = saving ? "Sending..." : "Send File";
   const submitDisabled = saving || !recipientAddress || !file;
 
   return (
-    <div className="p-6 bg-gray-800 rounded-lg shadow-md w-full max-w-2xl">
-      <h2 className="text-2xl font-bold text-white mb-6">Send File</h2>
-      <form className="space-y-6" onSubmit={submit}>
+    <div className="p-6 border rounded-lg w-full max-w-2xl">
+      <h2 className="text-2xl font-bold mb-6">Send File</h2>
+      <form
+        className="space-y-6"
+        onSubmit={(event) => {
+          void submit(event);
+        }}
+      >
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium mb-2">
             Recipient Ethereum Address
           </label>
           <input
-            className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-700 text-white"
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
             onChange={(e) => {
               setRecipientAddress(e.target.value);
             }}
@@ -120,18 +129,16 @@ export default function SendFile() {
         </div>
         <div
           className={`flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg ${
-            isDragging
-              ? "border-emerald-500 bg-emerald-900/20"
-              : "border-gray-600 bg-gray-700/20"
+            isDragging ? "border-primary bg-muted" : "border-muted bg-muted/50"
           }`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
           {file ? (
-            <p className="text-gray-200 font-medium">{file.name}</p>
+            <p className="text-primary/50">{file.name}</p>
           ) : (
-            <p className="text-gray-400">Drag & drop a file here</p>
+            <p className="text-primary/50">Drag & drop a file here</p>
           )}
           <input
             type="file"

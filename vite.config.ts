@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import dotenv from "dotenv";
 import environment from "vite-plugin-environment";
 import path from "path";
+import wasm from "vite-plugin-wasm";
+import topLevelAwait from "vite-plugin-top-level-await";
 
 dotenv.config({ path: ".env" });
 
@@ -28,6 +30,8 @@ export default defineConfig({
     },
   },
   plugins: [
+    wasm(),
+    topLevelAwait(),
     react(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),

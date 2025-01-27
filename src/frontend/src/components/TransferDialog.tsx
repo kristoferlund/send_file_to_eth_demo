@@ -1,12 +1,11 @@
 import { useAccount } from "wagmi";
-import { Dialog, DialogHeader } from "./ui/Dialog";
+import { Dialog, DialogContent, DialogHeader } from "./ui/Dialog";
 import { useEffect, useState } from "react";
 import { toBytes } from "viem";
 import * as vetkd from "ic-vetkd-utils";
 import useTransferGet from "../transfer/hooks/useTransferGet";
 import useVetkdEncryptedKey from "../vetkd/hooks/useVetkdEncryptedKey";
 import useVetkdPublicKey from "../vetkd/hooks/useVetkdPublicKey";
-import { DialogContent } from "@radix-ui/react-dialog";
 
 function TransferDialogInner({ transferId }: { transferId: number }) {
   const { address } = useAccount();
@@ -55,8 +54,8 @@ export default function TransferDialog({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogHeader>Transfer</DialogHeader>
       <DialogContent>
+        <DialogHeader>Transfer</DialogHeader>
         {isOpen && transferId && (
           <TransferDialogInner transferId={transferId} />
         )}
