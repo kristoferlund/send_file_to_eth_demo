@@ -1,13 +1,14 @@
 import { FormEvent, useState, useRef } from "react";
-import Button from "./ui/Button";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "./ui/Button";
 import { useActor } from "../ic/Actors";
 import useTransferCreate from "../transfer/hooks/useTransferCreate";
-import toast from "react-hot-toast";
+import { useToast } from "@/hooks/use-toast";
+import { LoaderCircle } from "lucide-react";
 
 export default function SendFile() {
   const { actor } = useActor();
   const { mutateAsync: createTransfer } = useTransferCreate();
+  const { toast } = useToast();
 
   // Local state
   const [recipientAddress, setRecipientAddress] = useState("");
@@ -25,13 +26,13 @@ export default function SendFile() {
       const fileBuffer = await file.arrayBuffer();
       const encodedMessage = new Uint8Array(fileBuffer);
       await createTransfer({ recipientAddress, file: encodedMessage });
-      toast.success("File sent successfully!", {
-        position: "bottom-right",
-      });
+      toast({ description: "File sent successfully!" });
       setFile(null); // Reset file after successful transfer
     } catch (error) {
-      toast.error("Failed to send the file. Please try again.", {
-        position: "bottom-right",
+      console.error(error);
+      toast({
+        variant: "destructive",
+        description: "Failed to send the file. Please try again.",
       });
     } finally {
       setSaving(false);
@@ -52,31 +53,32 @@ export default function SendFile() {
     event.preventDefault();
     setIsDragging(false);
 
-    const droppedFiles = event.dataTransfer?.files;
-    if (droppedFiles && droppedFiles.length > 1) {
-      toast.error("Only one file can be uploaded at a time.", {
-        position: "bottom-right",
+    const droppedFiles = event.dataTransfer.files;
+    if (droppedFiles.length > 1) {
+      toast({
+        variant: "destructive",
+        description: "Only one file can be uploaded at a time.",
       });
       return;
     }
 
-    const droppedFile = droppedFiles?.[0];
-    if (droppedFile) {
-      if (droppedFile.size > 1024 * 1024) {
-        toast.error("File size exceeds the maximum limit of 1MB.", {
-          position: "bottom-right",
-        });
-        return;
-      }
-      setFile(droppedFile);
+    const droppedFile = droppedFiles[0];
+    if (droppedFile.size > 1024 * 1024) {
+      toast({
+        variant: "destructive",
+        description: "File size exceeds the maximum limit of 1MB.",
+      });
+      return;
     }
+    setFile(droppedFile);
   }
 
   function handleFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = event.target.files;
     if (selectedFiles && selectedFiles.length > 1) {
-      toast.error("Only one file can be uploaded at a time.", {
-        position: "bottom-right",
+      toast({
+        variant: "destructive",
+        description: "Only one file can be uploaded at a time.",
       });
       return;
     }
@@ -84,8 +86,9 @@ export default function SendFile() {
     const selectedFile = selectedFiles?.[0];
     if (selectedFile) {
       if (selectedFile.size > 1024 * 1024) {
-        toast.error("File size exceeds the maximum limit of 1MB.", {
-          position: "bottom-right",
+        toast({
+          variant: "destructive",
+          description: "File size exceeds the maximum limit of 1MB.",
         });
         return;
       }
@@ -93,7 +96,7 @@ export default function SendFile() {
     }
   }
 
-  const submitIcon = saving ? faCircleNotch : undefined;
+  const submitIcon = saving ? <LoaderCircle /> : undefined;
   const submitText = saving ? "Sending..." : "Send File";
   const submitDisabled = saving || !recipientAddress || !file;
 
@@ -107,7 +110,9 @@ export default function SendFile() {
           </label>
           <input
             className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-700 text-white"
-            onChange={(e) => setRecipientAddress(e.target.value)}
+            onChange={(e) => {
+              setRecipientAddress(e.target.value);
+            }}
             placeholder="0x123..."
             type="text"
             value={recipientAddress}
@@ -144,14 +149,8 @@ export default function SendFile() {
             Select File
           </Button>
         </div>
-        <Button
-          className="w-full"
-          disabled={submitDisabled}
-          icon={submitIcon}
-          spin
-          type="submit"
-          variant="primary"
-        >
+        <Button className="w-full" disabled={submitDisabled} type="submit">
+          {submitIcon}
           {submitText}
         </Button>
       </form>

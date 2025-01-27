@@ -1,7 +1,7 @@
-import Button from "../ui/Button";
+import { Button } from "@/components/ui/button";
 import SessionDialog from "./SessionDialog";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { User } from "lucide-react";
 
 export default function SessionButton() {
   // Local state
@@ -10,18 +10,11 @@ export default function SessionButton() {
   return (
     <>
       <Button
-        className="hidden w-10 h-10 rounded-full md:flex"
-        icon={faUser}
-        onClick={() => setIsOpen(true)}
-        variant="dark"
-      ></Button>
-      <Button
-        className="md:hidden"
-        icon={faUser}
-        onClick={() => setIsOpen(true)}
-        variant="dark"
+        onClick={() => {
+          setIsOpen(true);
+        }}
       >
-        User profile
+        <User />
       </Button>
       <SessionDialog isOpen={isOpen} setIsOpen={setIsOpen} />
     </>

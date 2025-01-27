@@ -1,12 +1,12 @@
 import { useAccount } from "wagmi";
-import Dialog from "./ui/Dialog";
-import { Dialog as HeadlessDialog } from "@headlessui/react";
+import { Dialog, DialogHeader } from "./ui/Dialog";
 import { useEffect, useState } from "react";
 import { toBytes } from "viem";
 import * as vetkd from "ic-vetkd-utils";
 import useTransferGet from "../transfer/hooks/useTransferGet";
 import useVetkdEncryptedKey from "../vetkd/hooks/useVetkdEncryptedKey";
 import useVetkdPublicKey from "../vetkd/hooks/useVetkdPublicKey";
+import { DialogContent } from "@radix-ui/react-dialog";
 
 function TransferDialogInner({ transferId }: { transferId: number }) {
   const { address } = useAccount();
@@ -27,7 +27,7 @@ function TransferDialogInner({ transferId }: { transferId: number }) {
       derivationId,
     );
     const ibeCiphertext = vetkd.IBECiphertext.deserialize(
-      transfer.file as Uint8Array<ArrayBufferLike>,
+      transfer.file as Uint8Array,
     );
     const ibePlaintext = ibeCiphertext.decrypt(key);
     setDecryptedMessage(new TextDecoder().decode(ibePlaintext));
@@ -54,13 +54,13 @@ export default function TransferDialog({
   setIsOpen: (isOpen: boolean) => void;
 }) {
   return (
-    <Dialog
-      className="relative z-50 w-80"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-    >
-      <HeadlessDialog.Title>Transfer</HeadlessDialog.Title>
-      {isOpen && transferId && <TransferDialogInner transferId={transferId} />}
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogHeader>Transfer</DialogHeader>
+      <DialogContent>
+        {isOpen && transferId && (
+          <TransferDialogInner transferId={transferId} />
+        )}
+      </DialogContent>
     </Dialog>
   );
 }

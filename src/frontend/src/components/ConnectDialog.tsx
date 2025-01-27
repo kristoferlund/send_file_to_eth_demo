@@ -1,10 +1,9 @@
 import { Connector, useAccount, useConnect } from "wagmi";
 
-import Button from "./ui/Button";
-import Dialog from "./ui/Dialog";
-import { Dialog as HeadlessDialog } from "@headlessui/react";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "./ui/Button";
+import { Dialog, DialogContent, DialogHeader } from "./ui/Dialog";
 import { useEffect } from "react";
+import { LoaderCircle } from "lucide-react";
 
 export default function ConnectDialog({
   isOpen,
@@ -24,11 +23,10 @@ export default function ConnectDialog({
   const icon = (connector: Connector) => {
     if (
       isPending &&
-      variables &&
       "id" in variables.connector &&
       connector.id === variables.connector.id
     ) {
-      return faCircleNotch;
+      return <LoaderCircle className="animate-spin" />;
     }
     return undefined;
   };
@@ -42,32 +40,28 @@ export default function ConnectDialog({
   };
 
   return (
-    <Dialog
-      className="relative z-50 w-80"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-    >
-      <HeadlessDialog.Title> Connect Wallet</HeadlessDialog.Title>
-
-      {connectors.map((connector) => (
-        <Button
-          className="justify-between w-52"
-          disabled={isConnected || isPending}
-          icon={icon(connector)}
-          key={connector.id}
-          onClick={() => connect({ connector })}
-          spin
-          variant="outline"
-        >
-          {connector.name}
-          <img className="w-4 h-4" src={iconSource(connector)} />
-        </Button>
-      ))}
-      {error && (
-        <div className="p-2 text-center text-white bg-red-500">
-          {error.message}
-        </div>
-      )}
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="w-64">
+        <DialogHeader>Connect Wallet</DialogHeader>
+        {connectors.map((connector) => (
+          <Button
+            className="justify-between w-52"
+            disabled={isConnected || isPending}
+            key={connector.id}
+            onClick={() => connect({ connector })}
+            variant="outline"
+          >
+            {icon(connector)}
+            {connector.name}
+            <img className="w-4 h-4" src={iconSource(connector)} />
+          </Button>
+        ))}
+        {error && (
+          <div className="p-2 text-center text-white bg-red-500">
+            {error.message}
+          </div>
+        )}
+      </DialogContent>
     </Dialog>
   );
 }

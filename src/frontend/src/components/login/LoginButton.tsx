@@ -1,9 +1,9 @@
 import { useAccount, useChainId } from "wagmi";
 
-import Button from "../ui/Button";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "../ui/Button";
 import { isChainIdSupported } from "../../wagmi/is-chain-id-supported";
 import { useSiwe } from "ic-siwe-js/react";
+import { LoaderCircle } from "lucide-react";
 
 export default function LoginButton() {
   const { isConnected } = useAccount();
@@ -20,7 +20,10 @@ export default function LoginButton() {
     return "Sign in";
   };
 
-  const icon = isLoggingIn || isPreparingLogin ? faCircleNotch : undefined;
+  const icon =
+    isLoggingIn || isPreparingLogin ? (
+      <LoaderCircle className="animate-spin" />
+    ) : undefined;
 
   const disabled =
     !isChainIdSupported(chainId) ||
@@ -29,13 +32,8 @@ export default function LoginButton() {
     isPreparingLogin;
 
   return (
-    <Button
-      className="w-44"
-      disabled={disabled}
-      icon={icon}
-      onClick={login}
-      spin
-    >
+    <Button className="w-44" disabled={disabled} onClick={() => void login()}>
+      {icon}
       {text()}
     </Button>
   );

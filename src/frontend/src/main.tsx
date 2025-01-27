@@ -8,10 +8,10 @@ import AuthGuard from "./AuthGuard.tsx";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { SiweIdentityProvider } from "ic-siwe-js/react";
-import { Toaster } from "react-hot-toast";
 import { WagmiProvider } from "wagmi";
 import { wagmiConfig } from "./wagmi/wagmi.config.ts";
 import { canisterId } from "../../ic_siwe_provider/declarations/index";
+import { Toaster } from "@/components/ui/toaster.tsx";
 
 const queryClient = new QueryClient();
 
@@ -23,11 +23,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Actors>
             <AuthGuard>
               <App />
+              <Toaster />
             </AuthGuard>
           </Actors>
         </SiweIdentityProvider>
       </QueryClientProvider>
     </WagmiProvider>
-    <Toaster />
   </React.StrictMode>,
 );

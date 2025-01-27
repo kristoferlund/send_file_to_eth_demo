@@ -1,5 +1,4 @@
-import EthButton from "./EthButton";
-import IdentityButton from "./IdentityButton";
+import EthBadge from "../EthBadge";
 import SessionButton from "./SessionButton";
 
 export default function Header() {
@@ -9,8 +8,7 @@ export default function Header() {
         Transfer
       </div>
       <div className="flex flex-col items-center justify-center gap-5 text-sm md:text-base md:flex-row">
-        <IdentityButton />
-        <EthButton />
+        <EthBadge />
         <SessionButton />
       </div>
       <div className="block text-xl font-bold text-center md:hidden">
