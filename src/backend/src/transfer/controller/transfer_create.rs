@@ -3,7 +3,8 @@ use crate::{
         transfer_manager::{TransferManager, TransferManagerCreateArgs},
         transfer_types::Transfer,
     },
-    utils::get_caller_address,
+    user::user_manager::UserManager,
+    utils::principal_to_blob,
 };
 use alloy::primitives::Address;
 use candid::CandidType;
@@ -20,7 +21,8 @@ pub struct TransferCreateRequest {
 
 #[update]
 pub async fn transfer_create(args: TransferCreateRequest) -> Result<Transfer, String> {
-    let from = get_caller_address().await?;
+    let principal_blob = principal_to_blob(ic_cdk::caller());
+    let from = UserManager::get(principal_blob).ok_or("User not found".to_string())?;
     let to = Address::parse_checksummed(args.to, None).map_err(|e| e.to_string())?;
     let transfer = TransferManager::create(TransferManagerCreateArgs {
         from,

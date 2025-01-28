@@ -31,6 +31,16 @@ type TransferGetResponse = variant {
   Err : text;
 };
 
+type UserGetResponse = variant {
+  Ok : opt text;
+  Err : text;
+};
+
+type UserRegisterResponse = variant {
+  Ok : text;
+  Err : text;
+};
+
 type VetkdEncryptedKeyResponse = variant {
   Ok : blob;
   Err : text;
@@ -43,8 +53,10 @@ type VetkdPublicKeyResponse = variant {
 
 service : () -> {
   "transfer_create" : (TransferCreateRequest) -> (TransferCreateResponse);
-  "transfer_list" : () -> (TransferListResponse);
-  "transfer_get" : (nat32) -> (TransferGetResponse);
+  "transfer_list" : () -> (TransferListResponse) query;
+  "transfer_get" : (nat32) -> (TransferGetResponse) query;
+  "user_get" : () -> (UserGetResponse) query;
+  "user_register" : () -> (UserRegisterResponse);
   "vetkd_encrypted_key" : (blob) -> (VetkdEncryptedKeyResponse);
   "vetkd_public_key" : (text) -> (VetkdPublicKeyResponse);
 };

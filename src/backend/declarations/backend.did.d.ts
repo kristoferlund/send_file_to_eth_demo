@@ -24,6 +24,10 @@ export type TransferGetResponse = { 'Ok' : Transfer } |
   { 'Err' : string };
 export type TransferListResponse = { 'Ok' : Array<Transfer> } |
   { 'Err' : string };
+export type UserGetResponse = { 'Ok' : [] | [string] } |
+  { 'Err' : string };
+export type UserRegisterResponse = { 'Ok' : string } |
+  { 'Err' : string };
 export type VetkdEncryptedKeyResponse = { 'Ok' : Uint8Array | number[] } |
   { 'Err' : string };
 export type VetkdPublicKeyResponse = { 'Ok' : Uint8Array | number[] } |
@@ -35,6 +39,8 @@ export interface _SERVICE {
   >,
   'transfer_get' : ActorMethod<[number], TransferGetResponse>,
   'transfer_list' : ActorMethod<[], TransferListResponse>,
+  'user_get' : ActorMethod<[], UserGetResponse>,
+  'user_register' : ActorMethod<[], UserRegisterResponse>,
   'vetkd_encrypted_key' : ActorMethod<
     [Uint8Array | number[]],
     VetkdEncryptedKeyResponse

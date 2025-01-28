@@ -1,13 +1,14 @@
-use ic_cdk::update;
-
 use crate::{
     transfer::{transfer_manager::TransferManager, transfer_types::Transfer},
-    utils::get_caller_address,
+    user::user_manager::UserManager,
+    utils::principal_to_blob,
 };
+use ic_cdk::query;
 
-#[update]
+#[query]
 pub async fn transfer_list() -> Result<Vec<Transfer>, String> {
-    let to = get_caller_address().await?;
+    let principal_blob = principal_to_blob(ic_cdk::caller());
+    let to = UserManager::get(principal_blob).ok_or("User not found".to_string())?;
     let transfers = TransferManager::list_by_to(to);
     let transfers = transfers.into_iter().map(|t| t.without_file()).collect();
     Ok(transfers)

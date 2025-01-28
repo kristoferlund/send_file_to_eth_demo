@@ -27,6 +27,14 @@ export const idlFactory = ({ IDL }) => {
     'Ok' : IDL.Vec(Transfer),
     'Err' : IDL.Text,
   });
+  const UserGetResponse = IDL.Variant({
+    'Ok' : IDL.Opt(IDL.Text),
+    'Err' : IDL.Text,
+  });
+  const UserRegisterResponse = IDL.Variant({
+    'Ok' : IDL.Text,
+    'Err' : IDL.Text,
+  });
   const VetkdEncryptedKeyResponse = IDL.Variant({
     'Ok' : IDL.Vec(IDL.Nat8),
     'Err' : IDL.Text,
@@ -41,8 +49,10 @@ export const idlFactory = ({ IDL }) => {
         [TransferCreateResponse],
         [],
       ),
-    'transfer_get' : IDL.Func([IDL.Nat32], [TransferGetResponse], []),
-    'transfer_list' : IDL.Func([], [TransferListResponse], []),
+    'transfer_get' : IDL.Func([IDL.Nat32], [TransferGetResponse], ['query']),
+    'transfer_list' : IDL.Func([], [TransferListResponse], ['query']),
+    'user_get' : IDL.Func([], [UserGetResponse], ['query']),
+    'user_register' : IDL.Func([], [UserRegisterResponse], []),
     'vetkd_encrypted_key' : IDL.Func(
         [IDL.Vec(IDL.Nat8)],
         [VetkdEncryptedKeyResponse],
