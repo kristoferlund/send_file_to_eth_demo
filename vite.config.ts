@@ -13,6 +13,7 @@ export default defineConfig({
   root: "src/frontend",
   build: {
     outDir: "../../dist",
+    target: "ES2022",
   },
   optimizeDeps: {
     esbuildOptions: {
