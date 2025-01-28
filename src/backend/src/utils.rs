@@ -23,11 +23,6 @@ pub async fn get_caller_address() -> Result<Address, String> {
     Ok(address)
 }
 
-pub async fn get_caller_address_string() -> Result<String, String> {
-    let address = get_caller_address().await?;
-    Ok(address.to_checksum(None))
-}
-
 pub fn principal_to_blob(principal: Principal) -> Blob<29> {
     principal.as_slice()[..29].try_into().unwrap()
 }
