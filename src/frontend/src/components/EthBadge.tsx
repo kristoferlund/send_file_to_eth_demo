@@ -1,7 +1,7 @@
 import { useAccount, useEnsName } from "wagmi";
-import { shortenEthAddress } from "../eth/utils/shortenEthAddress";
 import { Unplug } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { shortenEthAddress } from "@/lib/shortenEthAddress";
 
 function ButtonIcon() {
   const { isConnected, isConnecting } = useAccount();

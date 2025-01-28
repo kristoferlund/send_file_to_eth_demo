@@ -1,8 +1,9 @@
 import { useState } from "react";
-import useTransferList from "../transfer/hooks/useTransferList";
 import TransferDialog from "./TransferDialog";
 import { formatDistanceToNow } from "date-fns";
 import { File } from "lucide-react";
+import { formatSize } from "@/lib/formatSize";
+import useTransferList from "@/transfer/hooks/useTransferList";
 
 function ReceivedFilesInner() {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,11 +68,8 @@ function ReceivedFilesInner() {
                     </span>
                   </td>
                   <td className="p-4 text-sm text-primary/50">
-                    {transfer.size >= 1048576
-                      ? `${(transfer.size / 1048576).toFixed(2).replace(".", ",")} MB`
-                      : `${(transfer.size / 1024).toFixed(2).replace(".", ",")} KB`}
+                    {formatSize(transfer.size)}
                   </td>
-
                   <td className="p-4 text-sm text-primary/50">
                     {formattedDate}
                   </td>

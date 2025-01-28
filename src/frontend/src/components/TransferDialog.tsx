@@ -1,50 +1,55 @@
-import { useAccount } from "wagmi";
+import { formatSize } from "@/lib/formatSize";
 import { Dialog, DialogContent, DialogHeader } from "./ui/Dialog";
-import { useEffect, useState } from "react";
-import * as vetkd from "ic-vetkd-utils";
-import { TRANSFER_DERIVATION_ID } from "@/main";
 import useTransferGet from "@/transfer/hooks/useTransferGet";
-import useVetkdPublicKey from "@/vetkd/hooks/useVetkdPublicKey";
-import useVetkdEncryptedKey from "@/vetkd/hooks/useVetkdEncryptedKey";
+import { File, Download, LoaderCircle } from "lucide-react";
 
 function TransferDialogInner({ transferId }: { transferId: number }) {
-  const { address } = useAccount();
   const { data: transfer, isPending } = useTransferGet(transferId);
-  const { data: vetkdEncryptedKeyReturn } = useVetkdEncryptedKey();
-  const { data: publicKey } = useVetkdPublicKey(address);
-  const [decryptedMessage, setDecryptedMessage] = useState<string>();
 
-  useEffect(() => {
-    if (!vetkdEncryptedKeyReturn || !publicKey || !address || !transfer) {
-      return;
-    }
-    console.log("Decrypting message", transfer);
-    const { transportSecretKey, encryptedKey } = vetkdEncryptedKeyReturn;
-    try {
-      const key = transportSecretKey.decrypt(
-        encryptedKey,
-        publicKey,
-        TRANSFER_DERIVATION_ID,
-      );
-      const ibeCiphertext = vetkd.IBECiphertext.deserialize(
-        transfer.data as Uint8Array,
-      );
-      const ibePlaintext = ibeCiphertext.decrypt(key);
-      setDecryptedMessage(new TextDecoder().decode(ibePlaintext));
-    } catch (e) {
-      console.error("Error decrypting message", e);
-    }
-  }, [transfer, publicKey, address, vetkdEncryptedKeyReturn]);
+  const download = () => {
+    if (!transfer) return;
+    const blob = new Blob([transfer.decryptedData], {
+      type: transfer.content_type,
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = transfer.filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-4 flex justify-center items-center gap-2">
+        Decrypting <LoaderCircle className="animate-spin" />
+      </div>
+    );
   }
 
   if (!transfer || "Err" in transfer) {
-    return <div>Transfer not found</div>;
+    return (
+      <div className="p-4 text-center text-red-500">
+        Transfer could not be loaded
+      </div>
+    );
   }
 
-  return <div>{decryptedMessage}</div>;
+  return (
+    <div
+      className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted transition-colors"
+      onClick={download}
+    >
+      <File className="w-8 h-8 mr-4" />
+      <div className="flex-1">
+        <div className="font-medium truncate">{transfer.filename}</div>
+        <div className="text-sm text-gray-500">{formatSize(transfer.size)}</div>
+      </div>
+      <Download className="w-6 h-6 ml-4 text-gray-600" />
+    </div>
+  );
 }
 
 export default function TransferDialog({
@@ -59,7 +64,7 @@ export default function TransferDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
-        <DialogHeader>Transfer</DialogHeader>
+        <DialogHeader>Decrypt and download</DialogHeader>
         {isOpen && transferId && (
           <TransferDialogInner transferId={transferId} />
         )}

@@ -1,7 +1,6 @@
 import "./index.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
 import Actors from "./ic/Actors.tsx";
 import App from "./App.tsx";
 import AuthGuard from "./AuthGuard.tsx";
