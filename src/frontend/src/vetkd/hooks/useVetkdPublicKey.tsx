@@ -6,6 +6,7 @@ export default function useVetkdPublicKey(address?: string) {
   return useQuery({
     queryKey: ["public_key_get"],
     queryFn: async () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const response = await backend?.vetkd_public_key(address!);
       if (!response) {
         console.error("Error getting public key, empty response");
@@ -15,7 +16,7 @@ export default function useVetkdPublicKey(address?: string) {
         console.error("Error getting public key", response.Err);
         return;
       }
-      return response.Ok as Uint8Array<ArrayBufferLike>;
+      return response.Ok as Uint8Array;
     },
     enabled: !!backend && !!address,
   });

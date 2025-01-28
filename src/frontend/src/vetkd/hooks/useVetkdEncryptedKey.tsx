@@ -20,7 +20,7 @@ export default function useVetkdEncryptedKey() {
         console.error("Error getting encrypted key", response.Err);
         return;
       }
-      const encryptedKey = response.Ok as Uint8Array<ArrayBufferLike>;
+      const encryptedKey = response.Ok as Uint8Array;
       return { transportSecretKey, encryptedKey };
     },
     enabled: !!backend,

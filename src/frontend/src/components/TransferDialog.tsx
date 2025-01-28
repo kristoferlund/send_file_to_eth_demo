@@ -1,11 +1,11 @@
 import { useAccount } from "wagmi";
 import { Dialog, DialogContent, DialogHeader } from "./ui/Dialog";
 import { useEffect, useState } from "react";
-import { toBytes } from "viem";
 import * as vetkd from "ic-vetkd-utils";
-import useTransferGet from "../transfer/hooks/useTransferGet";
-import useVetkdEncryptedKey from "../vetkd/hooks/useVetkdEncryptedKey";
-import useVetkdPublicKey from "../vetkd/hooks/useVetkdPublicKey";
+import { TRANSFER_DERIVATION_ID } from "@/main";
+import useTransferGet from "@/transfer/hooks/useTransferGet";
+import useVetkdPublicKey from "@/vetkd/hooks/useVetkdPublicKey";
+import useVetkdEncryptedKey from "@/vetkd/hooks/useVetkdEncryptedKey";
 
 function TransferDialogInner({ transferId }: { transferId: number }) {
   const { address } = useAccount();
@@ -18,18 +18,22 @@ function TransferDialogInner({ transferId }: { transferId: number }) {
     if (!vetkdEncryptedKeyReturn || !publicKey || !address || !transfer) {
       return;
     }
+    console.log("Decrypting message", transfer);
     const { transportSecretKey, encryptedKey } = vetkdEncryptedKeyReturn;
-    const derivationId = toBytes(address);
-    const key = transportSecretKey.decrypt(
-      encryptedKey,
-      publicKey,
-      derivationId,
-    );
-    const ibeCiphertext = vetkd.IBECiphertext.deserialize(
-      transfer.data as Uint8Array,
-    );
-    const ibePlaintext = ibeCiphertext.decrypt(key);
-    setDecryptedMessage(new TextDecoder().decode(ibePlaintext));
+    try {
+      const key = transportSecretKey.decrypt(
+        encryptedKey,
+        publicKey,
+        TRANSFER_DERIVATION_ID,
+      );
+      const ibeCiphertext = vetkd.IBECiphertext.deserialize(
+        transfer.data as Uint8Array,
+      );
+      const ibePlaintext = ibeCiphertext.decrypt(key);
+      setDecryptedMessage(new TextDecoder().decode(ibePlaintext));
+    } catch (e) {
+      console.error("Error decrypting message", e);
+    }
   }, [transfer, publicKey, address, vetkdEncryptedKeyReturn]);
 
   if (isPending) {

@@ -1,14 +1,14 @@
-use ic_cdk::update;
-use serde_bytes::ByteBuf;
-
 use crate::{
     declarations::chainkey_testing_canister::{
         chainkey_testing_canister, VetkdCurve, VetkdEncryptedKeyArgs, VetkdEncryptedKeyArgsKeyId,
     },
     utils::get_caller_address,
 };
+use ic_cdk::update;
+use serde_bytes::ByteBuf;
 
-/// Returns the profile of the caller if it exists.
+const TRANSFER_DERIVATION_ID: &[u8] = b"transfer";
+
 #[update]
 async fn vetkd_encrypted_key(encryption_public_key: Vec<u8>) -> Result<Vec<u8>, String> {
     let address = get_caller_address().await?;
@@ -19,7 +19,7 @@ async fn vetkd_encrypted_key(encryption_public_key: Vec<u8>) -> Result<Vec<u8>, 
             curve: VetkdCurve::Bls12381,
         },
         public_key_derivation_path: vec![ByteBuf::from(*address.0)],
-        derivation_id: ByteBuf::from(b"test-derivation-id".to_vec()),
+        derivation_id: ByteBuf::from(TRANSFER_DERIVATION_ID),
         encryption_public_key: ByteBuf::from(encryption_public_key),
     };
 
