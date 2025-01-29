@@ -1,6 +1,5 @@
 import { useAccount, useEnsName } from "wagmi";
 import { Unplug } from "lucide-react";
-import { Badge } from "./ui/badge";
 import { shortenEthAddress } from "@/lib/shortenEthAddress";
 
 function ButtonIcon() {
@@ -44,10 +43,10 @@ export default function EthBadge() {
 
   return (
     <>
-      <Badge className="bg-muted py-2 text-primary">
+      <div className="flex justify-center items-center rounded gap-1 h-10 text-sm bg-muted w-44 py-2 text-primary">
         <ButtonIcon />
         {buttonText()}
-      </Badge>
+      </div>
     </>
   );
 }

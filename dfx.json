@@ -26,6 +26,9 @@
     },
     "frontend": {
       "build": ["pnpm run build"],
+      "declarations": {
+        "output": "src/frontend/declarations"
+      },
       "source": ["dist"],
       "type": "assets"
     }

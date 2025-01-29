@@ -65,6 +65,10 @@
   html {
     @apply font-sans;
   }
+
+  a {
+    text-decoration: underline;
+  }
 }
 
 @layer components {

@@ -4,6 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import { File } from "lucide-react";
 import { formatSize } from "@/lib/formatSize";
 import useTransferList from "@/transfer/hooks/useTransferList";
+import { shortenEthAddress } from "@/lib/shortenEthAddress";
 
 function ReceivedFilesInner() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,8 +63,8 @@ function ReceivedFilesInner() {
                   </td>
                   <td className="p-4">
                     <span className="text-sm">
-                      <span className="px-2 py-1 bg-primary rounded-full text-primary-foreground">
-                        {`${transfer.from.slice(0, 6)}...${transfer.from.slice(-4)}`}
+                      <span className="px-2 py-1 bg-primary/50 rounded-full text-primary-foreground">
+                        {shortenEthAddress(transfer.from)}
                       </span>
                     </span>
                   </td>

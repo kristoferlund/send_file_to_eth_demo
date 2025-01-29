@@ -18,11 +18,29 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center w-full dark">
+    <div className="flex flex-col items-center w-full dark h-lvh">
       <Header />
-      <div className="flex flex-col items-center w-full gap-10 p-5 mb-20">
+      <div className="flex flex-grow flex-col items-center justify-center w-full gap-10 p-5 mb-20 max-w-2xl">
+        <div className="flex w-full">
+          <img alt="ic" className="w-40" src="/icp-logo.png" />
+        </div>
         <SendFile />
         <ReceivedFiles />
+        <div className="bg-destructive/50 rounded p-5 text-primary/50">
+          Do not trust this application with real secrets, it uses a fake
+          implementation of the vetKeys api. The production of vetKeys will be
+          available Q2 2025.
+        </div>
+        <div className="text-primary/50">
+          Fork on{" "}
+          <a
+            href="https://github.com/kristoferlund/send_file_to_eth_demo"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+        </div>
       </div>
     </div>
   );

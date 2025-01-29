@@ -29,40 +29,72 @@ export default function LoginPage(): React.ReactElement {
   }, [loginError, toast]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen gap-10">
-      <div className="flex items-center justify-center gap-5 md:gap-20">
-        <img alt="ic" className="w-20 h-20 md:w-28 md:h-28" src="/ic.svg" />
-      </div>
-      <div className="px-10 text-2xl font-bold text-center md:text-5xl">
-        Transfer
-      </div>
-      <div className="w-80 md:w-96 rounded-xl border bg-card text-card-foreground shadow">
-        <div className="flex flex-col items-center w-full gap-10 p-8">
-          <div className="flex items-center justify-center w-full gap-5">
-            <div className="items-center justify-center hidden w-8 h-8 text-xl font-bold rounded-full md:flex bg-primary text-primary-foreground">
-              1
+    <div className="flex flex-col gap-5 w-full h-screen items-center justify-center">
+      <div className="flex flex-col border rounded p-20 items-center justify-center w-[600px] gap-10 bg-muted/30">
+        <div className="flex w-full">
+          <img alt="ic" className="w-40" src="/icp-logo.png" />
+        </div>
+        <div className="text-xl font-bold md:text-3xl leading-loose">
+          Send encrypted files to any Ethereum address
+        </div>
+        <div className="leading-relaxed">
+          This demo application allows you to send encrypted files to any
+          Ethereum address. It uses{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/Identity-based_encryption"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Identity-based encryption (IBE)
+          </a>{" "}
+          together with the{" "}
+          <a
+            href="https://internetcomputer.org/docs/current/references/vetkeys-overview/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            vetKeys
+          </a>{" "}
+          Internet Computer feature.
+        </div>
+        <div className="w-full rounded-xl border bg-card text-card-foreground shadow mt-5">
+          <div className="flex flex-col items-center w-full gap-10 p-8">
+            <div className="flex items-center justify-center w-full gap-5">
+              <div className="items-center justify-center hidden w-8 h-8 text-xl font-bold rounded-full md:flex bg-primary text-primary-foreground">
+                1
+              </div>
+              <div>
+                {!isConnected && <ConnectButton />}
+                {isConnected && isChainIdSupported(chainId) && <EthBadge />}
+                {isConnected && !isChainIdSupported(chainId) && (
+                  <Button disabled variant="outline">
+                    <Activity />
+                    Unsupported Network
+                  </Button>
+                )}
+              </div>
             </div>
-            <div>
-              {!isConnected && <ConnectButton />}
-              {isConnected && isChainIdSupported(chainId) && <EthBadge />}
-              {isConnected && !isChainIdSupported(chainId) && (
-                <Button disabled variant="outline">
-                  <Activity />
-                  Unsupported Network
-                </Button>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center justify-center w-full gap-5">
-            <div className="items-center justify-center hidden w-8 h-8 text-xl font-bold rounded-full md:flex bg-primary text-primary-foreground">
-              2
-            </div>
-            <div>
-              {" "}
-              <LoginButton />
+            <div className="flex items-center justify-center w-full gap-5">
+              <div className="items-center justify-center hidden w-8 h-8 text-xl font-bold rounded-full md:flex bg-primary text-primary-foreground">
+                2
+              </div>
+              <div>
+                {" "}
+                <LoginButton />
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div className="text-primary/50">
+        Fork on{" "}
+        <a
+          href="https://github.com/kristoferlund/send_file_to_eth_demo"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
       </div>
     </div>
   );
