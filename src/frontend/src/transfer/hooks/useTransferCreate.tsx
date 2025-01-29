@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import * as vetkd from "ic-vetkd-utils";
-import { TRANSFER_DERIVATION_ID } from "@/main";
 import { useActor } from "@/ic/Actors";
 
 export default function useTransferCreate() {
@@ -30,9 +29,9 @@ export default function useTransferCreate() {
       const encodedMessage = new Uint8Array(fileBuffer);
       const encryptedFile = vetkd.IBECiphertext.encrypt(
         recipientPublicKey,
-        TRANSFER_DERIVATION_ID,
+        new Uint8Array(0),
         encodedMessage,
-        seed,
+        seed
       );
       const request = {
         to: recipientAddress,

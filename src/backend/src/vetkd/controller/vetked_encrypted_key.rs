@@ -7,8 +7,6 @@ use crate::{
 use ic_cdk::update;
 use serde_bytes::ByteBuf;
 
-const TRANSFER_DERIVATION_ID: &[u8] = b"transfer";
-
 #[update]
 async fn vetkd_encrypted_key(encryption_public_key: Vec<u8>) -> Result<Vec<u8>, String> {
     let address = get_caller_address().await?;
@@ -19,7 +17,7 @@ async fn vetkd_encrypted_key(encryption_public_key: Vec<u8>) -> Result<Vec<u8>, 
             curve: VetkdCurve::Bls12381,
         },
         public_key_derivation_path: vec![ByteBuf::from(*address.0)],
-        derivation_id: ByteBuf::from(TRANSFER_DERIVATION_ID),
+        derivation_id: ByteBuf::new(),
         encryption_public_key: ByteBuf::from(encryption_public_key),
     };
 

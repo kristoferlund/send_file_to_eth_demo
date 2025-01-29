@@ -3,7 +3,6 @@ import * as vetkd from "ic-vetkd-utils";
 import { useQuery } from "@tanstack/react-query";
 import useVetkdEncryptedKey from "@/vetkd/hooks/useVetkdEncryptedKey";
 import useVetkdPublicKey from "@/vetkd/hooks/useVetkdPublicKey";
-import { TRANSFER_DERIVATION_ID } from "@/main";
 import { useAccount } from "wagmi";
 import { useActor } from "@/ic/Actors";
 
@@ -30,10 +29,10 @@ export default function useTransferGet(transferId: number) {
         const key = transportSecretKey.decrypt(
           encryptedKey,
           publicKey!,
-          TRANSFER_DERIVATION_ID,
+          new Uint8Array()
         );
         const ibeCiphertext = vetkd.IBECiphertext.deserialize(
-          transfer.data as Uint8Array,
+          transfer.data as Uint8Array
         );
         const decryptedData = ibeCiphertext.decrypt(key);
         return { decryptedData, ...transfer };
