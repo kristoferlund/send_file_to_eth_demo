@@ -15,9 +15,11 @@ This demo application allows you to send encrypted files to any Ethereum address
 
 
 > [!NOTE]
-> The vetKeys feature will be available Q2 2025. This demo uses the [chainkey_testing_canister](https://github.com/dfinity/chainkey-testing-canister) to simulate the vetKeys feature.
+> The vetKeys feature will be available Q2 2025. This demo uses the [chainkey_testing_canister](https://github.com/dfinity/chainkey-testing-canister) to simulate vetKeys.
 
 ![Screenshot](./media/screenshot.png)
+
+### Live demo: [https://h62xu-2iaaa-aaaal-qshoq-cai.icp0.io](https://h62xu-2iaaa-aaaal-qshoq-cai.icp0.io)
 
 ## Table of Contents
 - [Sending a file](#sending-a-file)
