@@ -34,7 +34,8 @@ export default function Actors({ children }: { children: ReactNode }) {
     console.error("onResponseError", error);
     if (
       error instanceof Error &&
-      error.message.includes("Invalid delegation")
+      (error.message.includes("Invalid delegation") ||
+        error.message.includes("Specified sender delegation has expired"))
     ) {
       toast({
         variant: "destructive",
