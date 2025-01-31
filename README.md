@@ -207,6 +207,15 @@ return { decryptedData, ...transfer };
 
 ## Run locally
 
+Pre-requisites:
+
+- [Local Internet Computer dev environment](https://internetcomputer.org/docs/current/developer-docs/backend/rust/dev-env)
+- [pnpm](https://pnpm.io/installation)
+
+Once you have the prerequisites installed, you can clone this repository and run
+the project.
+
+
 ```bash
 dfx start --clean --background
 pnpm i
