@@ -30,7 +30,7 @@ export default function LoginPage(): React.ReactElement {
 
   return (
     <div className="flex flex-col gap-5 w-full h-screen items-center justify-center">
-      <div className="flex flex-col border rounded p-20 items-center justify-center w-[600px] gap-10 bg-muted/30">
+      <div className="flex flex-col border rounded px-5 md:px-20 pt-24 pb-10 md:pt-20 md:pb-20 items-center justify-center w-full md:w-[600px] gap-10 bg-muted/30">
         <div className="flex w-full">
           <img alt="ic" className="w-40" src="/icp-logo.png" />
         </div>

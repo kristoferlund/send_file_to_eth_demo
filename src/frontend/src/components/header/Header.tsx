@@ -7,12 +7,12 @@ export default function Header() {
       <div className="hidden text-xl font-bold text-center md:block">
         Send encrypted files to any Ethereum address
       </div>
-      <div className="flex flex-col items-center justify-center gap-5 text-sm md:text-base md:flex-row">
+      <div className="flex items-center justify-between md:justify-center gap-5 text-sm md:text-base flex-row">
         <EthBadge />
         <SessionButton />
       </div>
-      <div className="block text-xl font-bold text-center md:hidden">
-        Transfer
+      <div className="block text-xl font-bold md:hidden">
+        Send encrypted files to any Ethereum address
       </div>
     </div>
   );
