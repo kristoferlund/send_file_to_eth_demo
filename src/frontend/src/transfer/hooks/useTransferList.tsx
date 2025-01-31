@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useActor } from "../../ic/Actors";
+import { useAccount } from "wagmi";
 
 export default function useTransferList() {
   const { actor: backend } = useActor();
+  const { address } = useAccount();
   return useQuery({
-    queryKey: ["transfer_list"],
+    queryKey: ["transfer_list", address],
     queryFn: async () => {
       const response = await backend?.transfer_list();
 
@@ -14,6 +16,6 @@ export default function useTransferList() {
 
       return response.Ok;
     },
-    enabled: !!backend,
+    enabled: !!backend && !!address,
   });
 }

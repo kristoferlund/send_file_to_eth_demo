@@ -12,7 +12,7 @@ export default function useTransferGet(transferId: number) {
   const { data: vetkdEncryptedKeyReturn } = useVetkdEncryptedKey();
   const { data: publicKey } = useVetkdPublicKey(address);
   return useQuery({
-    queryKey: ["transfer_get", transferId],
+    queryKey: ["transfer_get", transferId, address],
     queryFn: async () => {
       const response = await backend?.transfer_get(transferId);
       if (!response) {
@@ -40,6 +40,6 @@ export default function useTransferGet(transferId: number) {
         console.error("Error decrypting transfer", e);
       }
     },
-    enabled: !!backend && !!vetkdEncryptedKeyReturn && !!publicKey,
+    enabled: !!backend && !!vetkdEncryptedKeyReturn && !!publicKey && !!address,
   });
 }
