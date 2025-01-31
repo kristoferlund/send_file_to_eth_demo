@@ -25,7 +25,7 @@ dfx deploy ic_siwe_provider --argument "(
     }
 )"
 
-rm -rf src/backend/src/declarations # Delete the declarations folder to retrigger build.rs
+touch src/backend/build.rs # Touch the build.rs file to retrigger the build
 dfx deploy backend
 
 dfx deploy frontend
