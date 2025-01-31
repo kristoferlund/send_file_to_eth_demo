@@ -142,20 +142,6 @@ A receiveing user logs in with their Ethereum address same as the sender. The fr
 
 vetKeys on the Internet Computer allow developers to more easily perform encryption, threshold decryption, and signing when building dapps on ICP. It is powered by a protocol called vetKD (Verifiably Encrypted Threshold Key Derivation) that allows to derive decryption keys on demand.
 
-Key derivation on demand
-Blockchains are not known for their privacy capabilities. The goal of vetKeys is to ease the burden of using security and privacy tools on the Internet Computer. Encrypting information locally on a device and storing it on a blockchain is easy as the secret key material always remains on the local device and is not exposed. The difficulty arises when a user may want to retrieve the encrypted information from a different device, or share with a different user as there is no straightforward way to pass secret key material across public channels in a privacy-friendly way.
-
-vetKeys leverages the fact that BLS signatures, the native signature scheme on ICP, are unique, and therefore ideally suited (under the right conditions) to be used as cryptographic decryption keys. As BLS signatures are computed in a distributed way on ICP, there is no central authority deriving keys for users. Furthermore, following standard practices in IBE schemes the derived key can be transported to the user in an encrypted manner. As such, nodes and the network never have access to a user’s keys.
-
-The availability of vetKeys allows for a series of applications including but not limited to those covered in the following sections.
-
-End-to-end encryption
-The main use case is to enable a blockchain to host threshold-encrypted data in a way that scales to millions of users and billions of secrets, using just a single threshold-shared secret key. BLS signatures are unique, making them immediately useful as symmetric keys.
-
-Think for example of a secure file storage dapp: a user could use the BLS signature on their identity as the root secret under which they encrypt their files before storing them in the dapp. The dapp enforces that only the authenticated user is allowed to recover the root key, and hence decrypt the files. The nodes in the blockchain assist a user in recovering their root key, but never see that key or the content of the files.
-
-
-
 ### Getting the private key
 
 One of the challenges when doing encryption in an open network like the Internet Computer is how to securely store and retrieve the private key. vetKeys solves this problem by allowing the user to derive the private key on demand. To securely transfer the private key to the requesting user, a transport secret key is used to encrypt the private key while in transfer.
