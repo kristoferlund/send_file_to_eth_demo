@@ -10,5 +10,5 @@ This demo application allows you to send encrypted files to any Ethereum address
 ```bash
 dfx start --clean --background
 pnpm i
-make deploy-all
+bash scripts/deploy.sh
 ```
