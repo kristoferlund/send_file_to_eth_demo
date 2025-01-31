@@ -5,7 +5,6 @@ import {
   InterceptorRequestData,
   createActorContext,
   createUseActorHook,
-  isIdentityExpiredError,
 } from "ic-use-actor";
 import { canisterId, idlFactory } from "../../../backend/declarations/index";
 
@@ -31,11 +30,15 @@ export default function Actors({ children }: { children: ReactNode }) {
   };
 
   const handleResponseError = (data: InterceptorErrorData) => {
-    console.error("onResponseError", data.error);
-    if (isIdentityExpiredError(data.error)) {
+    const { error } = data;
+    console.error("onResponseError", error);
+    if (
+      error instanceof Error &&
+      error.message.includes("Invalid delegation")
+    ) {
       toast({
         variant: "destructive",
-        description: "Login expired.",
+        description: "Invalid delegation. Please log in again.",
       });
       setTimeout(() => {
         clear(); // Clears the identity from the state and local storage. Effectively "logs the user out".
@@ -44,7 +47,7 @@ export default function Actors({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (typeof data === "object" && data !== null && "message" in data) {
+    if (typeof data === "object" && "message" in data) {
       errorToast(data);
     }
   };
@@ -61,7 +64,9 @@ export default function Actors({ children }: { children: ReactNode }) {
       identity={identity}
       idlFactory={idlFactory}
       onRequest={handleRequest}
-      onRequestError={(error) => errorToast(error)}
+      onRequestError={(error) => {
+        errorToast(error);
+      }}
       onResponseError={handleResponseError}
     >
       {children}
