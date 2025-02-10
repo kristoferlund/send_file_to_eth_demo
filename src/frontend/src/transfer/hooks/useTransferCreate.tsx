@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import * as vetkd from "ic-vetkd-utils";
 import { useActor } from "@/ic/Actors";
+import { toBytes } from "viem";
 
 export default function useTransferCreate() {
   const { actor: backend } = useActor();
@@ -17,7 +18,7 @@ export default function useTransferCreate() {
         console.error("Backend actor not available");
         return;
       }
-      const response = await backend.vetkd_public_key(recipientAddress);
+      const response = await backend.vetkd_public_key();
       if ("Err" in response) {
         console.error("Error getting recipient public key", response.Err);
         return;
@@ -29,7 +30,7 @@ export default function useTransferCreate() {
       const encodedMessage = new Uint8Array(fileBuffer);
       const encryptedFile = vetkd.IBECiphertext.encrypt(
         recipientPublicKey,
-        new Uint8Array(0),
+        toBytes(recipientAddress),
         encodedMessage,
         seed
       );

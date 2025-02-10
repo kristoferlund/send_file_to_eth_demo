@@ -5,12 +5,13 @@ import useVetkdEncryptedKey from "@/vetkd/hooks/useVetkdEncryptedKey";
 import useVetkdPublicKey from "@/vetkd/hooks/useVetkdPublicKey";
 import { useAccount } from "wagmi";
 import { useActor } from "@/ic/Actors";
+import { toBytes } from "viem";
 
 export default function useTransferGet(transferId: number) {
   const { actor: backend } = useActor();
   const { address } = useAccount();
   const { data: vetkdEncryptedKeyReturn } = useVetkdEncryptedKey();
-  const { data: publicKey } = useVetkdPublicKey(address);
+  const { data: publicKey } = useVetkdPublicKey();
   return useQuery({
     queryKey: ["transfer_get", transferId, address],
     queryFn: async () => {
@@ -29,7 +30,7 @@ export default function useTransferGet(transferId: number) {
         const key = transportSecretKey.decrypt(
           encryptedKey,
           publicKey!,
-          new Uint8Array()
+          toBytes(address!)
         );
         const ibeCiphertext = vetkd.IBECiphertext.deserialize(
           transfer.data as Uint8Array

@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useActor } from "../../ic/Actors";
 
-export default function useVetkdPublicKey(address?: string) {
+export default function useVetkdPublicKey() {
   const { actor: backend } = useActor();
   return useQuery({
     queryKey: ["public_key_get"],
     queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const response = await backend?.vetkd_public_key(address!);
+      const response = await backend?.vetkd_public_key();
       if (!response) {
         console.error("Error getting public key, empty response");
         return;
@@ -18,6 +17,6 @@ export default function useVetkdPublicKey(address?: string) {
       }
       return response.Ok as Uint8Array;
     },
-    enabled: !!backend && !!address,
+    enabled: !!backend,
   });
 }

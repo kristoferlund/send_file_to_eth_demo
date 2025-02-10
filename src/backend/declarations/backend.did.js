@@ -58,7 +58,7 @@ export const idlFactory = ({ IDL }) => {
         [VetkdEncryptedKeyResponse],
         [],
       ),
-    'vetkd_public_key' : IDL.Func([IDL.Text], [VetkdPublicKeyResponse], []),
+    'vetkd_public_key' : IDL.Func([], [VetkdPublicKeyResponse], []),
   });
 };
 export const init = ({ IDL }) => { return []; };

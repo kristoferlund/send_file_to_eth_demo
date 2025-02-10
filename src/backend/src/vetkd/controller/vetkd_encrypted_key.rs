@@ -16,8 +16,8 @@ async fn vetkd_encrypted_key(encryption_public_key: Vec<u8>) -> Result<Vec<u8>, 
             name: "insecure_test_key_1".to_string(),
             curve: VetkdCurve::Bls12381,
         },
-        public_key_derivation_path: vec![ByteBuf::from(*address.0)],
-        derivation_id: ByteBuf::new(),
+        public_key_derivation_path: vec![],
+        derivation_id: ByteBuf::from(*address.0),
         encryption_public_key: ByteBuf::from(encryption_public_key),
     };
 

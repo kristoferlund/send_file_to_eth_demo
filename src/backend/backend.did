@@ -58,5 +58,5 @@ service : () -> {
   "user_get" : () -> (UserGetResponse) query;
   "user_register" : () -> (UserRegisterResponse);
   "vetkd_encrypted_key" : (blob) -> (VetkdEncryptedKeyResponse);
-  "vetkd_public_key" : (text) -> (VetkdPublicKeyResponse);
+  "vetkd_public_key" : () -> (VetkdPublicKeyResponse);
 };

@@ -45,7 +45,7 @@ export interface _SERVICE {
     [Uint8Array | number[]],
     VetkdEncryptedKeyResponse
   >,
-  'vetkd_public_key' : ActorMethod<[string], VetkdPublicKeyResponse>,
+  'vetkd_public_key' : ActorMethod<[], VetkdPublicKeyResponse>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];
