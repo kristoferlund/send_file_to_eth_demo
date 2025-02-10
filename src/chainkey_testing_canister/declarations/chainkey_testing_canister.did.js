@@ -54,14 +54,14 @@ export const idlFactory = ({ IDL }) => {
   const sign_with_schnorr_result = IDL.Record({
     'signature' : IDL.Vec(IDL.Nat8),
   });
-  const vetkd_curve = IDL.Variant({ 'bls12_381' : IDL.Null });
-  const vetkd_encrypted_key_args = IDL.Record({
+  const vetkd_curve = IDL.Variant({ 'bls12_381_g2' : IDL.Null });
+  const vetkd_derive_encrypted_key_args = IDL.Record({
     'key_id' : IDL.Record({ 'name' : IDL.Text, 'curve' : vetkd_curve }),
+    'derivation_path' : IDL.Vec(IDL.Vec(IDL.Nat8)),
     'derivation_id' : IDL.Vec(IDL.Nat8),
     'encryption_public_key' : IDL.Vec(IDL.Nat8),
-    'public_key_derivation_path' : IDL.Vec(IDL.Vec(IDL.Nat8)),
   });
-  const vetkd_encrypted_key_result = IDL.Record({
+  const vetkd_derive_encrypted_key_result = IDL.Record({
     'encrypted_key' : IDL.Vec(IDL.Nat8),
   });
   const vetkd_public_key_args = IDL.Record({
@@ -94,9 +94,9 @@ export const idlFactory = ({ IDL }) => {
         [sign_with_schnorr_result],
         [],
       ),
-    'vetkd_encrypted_key' : IDL.Func(
-        [vetkd_encrypted_key_args],
-        [vetkd_encrypted_key_result],
+    'vetkd_derive_encrypted_key' : IDL.Func(
+        [vetkd_derive_encrypted_key_args],
+        [vetkd_derive_encrypted_key_result],
         [],
       ),
     'vetkd_public_key' : IDL.Func(

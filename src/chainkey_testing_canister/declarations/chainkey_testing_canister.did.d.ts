@@ -45,14 +45,14 @@ export interface sign_with_schnorr_args {
 export interface sign_with_schnorr_result {
   'signature' : Uint8Array | number[],
 }
-export type vetkd_curve = { 'bls12_381' : null };
-export interface vetkd_encrypted_key_args {
+export type vetkd_curve = { 'bls12_381_g2' : null };
+export interface vetkd_derive_encrypted_key_args {
   'key_id' : { 'name' : string, 'curve' : vetkd_curve },
+  'derivation_path' : Array<Uint8Array | number[]>,
   'derivation_id' : Uint8Array | number[],
   'encryption_public_key' : Uint8Array | number[],
-  'public_key_derivation_path' : Array<Uint8Array | number[]>,
 }
-export interface vetkd_encrypted_key_result {
+export interface vetkd_derive_encrypted_key_result {
   'encrypted_key' : Uint8Array | number[],
 }
 export interface vetkd_public_key_args {
@@ -81,9 +81,9 @@ export interface _SERVICE {
     [sign_with_schnorr_args],
     sign_with_schnorr_result
   >,
-  'vetkd_encrypted_key' : ActorMethod<
-    [vetkd_encrypted_key_args],
-    vetkd_encrypted_key_result
+  'vetkd_derive_encrypted_key' : ActorMethod<
+    [vetkd_derive_encrypted_key_args],
+    vetkd_derive_encrypted_key_result
   >,
   'vetkd_public_key' : ActorMethod<
     [vetkd_public_key_args],
