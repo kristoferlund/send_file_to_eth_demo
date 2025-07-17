@@ -40,7 +40,11 @@ export default function useTransferCreate() {
         filename: file.name,
         data: encryptedFile.serialize(),
       };
-      return backend.transfer_create(request);
+      const result = await backend.transfer_create(request);
+      if ("Err" in result) {
+        throw new Error(result.Err);
+      }
+      return result.Ok;
     },
   });
 }

@@ -5,6 +5,7 @@ import useTransferCreate from "../transfer/hooks/useTransferCreate";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
 import { queryClient } from "@/main";
+import { isAddress } from "viem";
 
 export default function SendFile() {
   const { actor } = useActor();
@@ -24,6 +25,24 @@ export default function SendFile() {
 
     setSaving(true);
     try {
+      if (!isAddress(recipientAddress)) {
+        toast({
+          variant: "destructive",
+          description:
+            "Invalid Ethereum address format. Please check and try again.",
+        });
+        return;
+      }
+
+      if (!isAddress(recipientAddress, { strict: true })) {
+        toast({
+          variant: "destructive",
+          description:
+            "Address must be in proper checksum format (mixed case).",
+        });
+        return;
+      }
+
       await createTransfer({ recipientAddress, file });
       toast({ description: "File sent successfully!" });
       void queryClient.invalidateQueries({ queryKey: ["transfer_list"] });
